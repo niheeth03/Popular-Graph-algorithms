@@ -1,0 +1,51 @@
+#include<iostream>
+#include<utility>
+#include<algorithm>
+using namespace std;
+int a[100001]={0};
+int root(int x){
+	if(a[x]==x){
+		return x;
+	}
+	else{
+	
+	return root(a[x]);}
+	
+}
+int mix(int c,int b){
+	int m=root(c);
+	int n=root(b);
+	if(m!=n){
+	   a[m]=a[n];
+	}
+}
+int check(pair<int,pair<int,int> >p[],int edges){
+	int count=0;
+	for(int i=0;i<edges;i++){
+		int t=p[i].second.first;
+		int u=p[i].second.second;
+		int v=p[i].first;
+		if(root(t)!=root(u)){
+			mix(t,u);
+		}
+		else{
+			count++;
+		}
+	}
+	return count;
+}
+
+int main(){
+	int x,y,nodes,edges, weight;
+	cin>>nodes>>edges;
+	pair<int,pair<int,int> >p[edges];
+	for(int i=0;i<edges;i++){
+	    cin>>x>>y>>weight;
+		p[i]=make_pair(weight,make_pair(x,y));	
+	}
+	for(int i=1;i<=nodes;i++){
+		a[i]=i;
+	}
+	int b=check(p,edges);
+	cout<<b<<endl;
+}
