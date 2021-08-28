@@ -1,0 +1,57 @@
+#include<iostream>
+#include<utility>
+#include<algorithm>
+using namespace std;
+int a[100001]={0},rank[100001]={0};
+int root(int x){
+	if(a[x]==x){
+		return x;
+	}
+	return a[x]=root(a[x]);
+}
+int mix(int c,int b){
+	int m=root(c);
+	int n=root(b);
+	if(m!=n){
+	   if(rank[m]==rank[n]){
+	   	 rank[m]++;
+	   	 a[n]=m;
+	   }
+	   else if(rank[m]<rank[n]){
+	   	a[m]=n;
+	   }
+	   else{
+	   	 a[n]=m;
+	   }
+	}
+}
+int kruskal(pair<int,pair<int,int> >p[],int edges){
+	int minimumcost=0;
+	for(int i=0;i<edges;i++){
+		int t=p[i].second.first;
+		int u=p[i].second.second;
+		int v=p[i].first;
+		if(root(t)!=root(u)){
+			minimumcost+=v;
+			mix(t,u);
+		}
+	}
+	return minimumcost;
+}
+
+int main(){
+	int x,y,nodes,edges, weight;
+	cin>>nodes>>edges;
+	pair<int,pair<int,int> >p[edges];
+	for(int i=0;i<edges;i++){
+	    cin>>x>>y>>weight;
+		p[i]=make_pair(weight,make_pair(x,y));	
+	}
+	sort(p,p+edges);
+	for(int i=1;i<=nodes;i++){
+		a[i]=i;
+		rank[i]=0;
+	}
+	int b=kruskal(p,edges);
+	cout<<b<<endl;
+}
